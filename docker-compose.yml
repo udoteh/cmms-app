@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  reverse-proxy:
+    image: nginx:alpine
+    container_name: reverse-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - cmms-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    expose:
+      - "80"
+    networks:
+      - cmms-net
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    expose:
+      - "8000"
+    networks:
+      - cmms-net
+
+  redis:
+    image: redis:7
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - cmms-net
+
+networks:
+  cmms-net:
+    driver: bridge
+
