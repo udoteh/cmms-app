@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import EquipmentList from './pages/EquipmentList';
+import WorkOrderList from './pages/WorkOrderList';
+import MaintenanceList from './pages/MaintenanceList';
+import NavBar from './components/NavBar';
 
 function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    fetch('http://localhost:8000/api/hello/')
-      .then(response => response.json())
-      .then(data => setMessage(data.message))
-      .catch(error => console.error('Error:', error));
-  }, []);
-
   return (
-    <div>
-      <h1>React Frontend</h1>
-      <p>{message}</p>
-    </div>
+    <BrowserRouter>
+      <NavBar />
+      <Routes>
+        <Route path="/assets" element={<EquipmentList />} />
+        <Route path="/work-orders" element={<WorkOrderList />} />
+        <Route path="/maintenance" element={<MaintenanceList />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
-
